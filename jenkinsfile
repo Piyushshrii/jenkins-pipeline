@@ -39,7 +39,7 @@ pipeline {
 
         stage('Unit Test') {
             steps {
-                sh 'chmod +x ./ci/03-unit-test.sh && ./ci/03-unit-test.sh'
+                sh 'chmod +x ci/03-unit-test.sh && ci/03-unit-test.sh'
                 mstest testResultsFile:"**/*.trx"
             }
         }
@@ -54,8 +54,8 @@ pipeline {
                     echo "Build Number: $buildNumber"
                 
                     withCredentials([usernamePassword(credentialsId: 'c9b3d4dd-7e19-4bf4-bfcb-db82f78430f9', usernameVariable: 'DOCKER_HUB_USER', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                        sh "chmod +x ./ci/04-push.sh"
-                        sh "./ci/04-push.sh $buildNumber"
+                        sh "chmod +x ci/04-push.sh"
+                        sh "ci/04-push.sh $buildNumber"
                     }
                     
                     echo "Build Completed - Job Name: $jobName  --  Build Number: $buildNumber"
