@@ -4,15 +4,12 @@ pipeline {
         stage('Verify Shell Environment') {
             steps {
                 script {
-                    // Get the job name and build number
                     def jobName = env.JOB_NAME
                     def buildNumber = env.BUILD_NUMBER
 
-                    // Print the job name and build number
                     echo "Job Name: $jobName"
                     echo "Build Number: $buildNumber"
 
-                    // Use them in shell commands for checking Docker and .NET versions
                     sh 'sudo docker --version'
                     sh 'sudo dotnet --info'
                 }
@@ -22,7 +19,6 @@ pipeline {
         stage('Checkout Jenkins Pipeline Git Repository') {
             steps {
                 script {
-                    // Use the updated Git repository URL
                     def gitRepoUrl = 'https://github.com/Piyushshrii/jenkins-pipeline.git'
 
                     checkout([$class: 'GitSCM', 
@@ -36,14 +32,13 @@ pipeline {
 
         stage('Build Application') {
             steps {
-                // Make the build script executable and run it
+                // Adjust the script path and execution
                 sh 'chmod +x ./ci/01-build.sh && ./ci/01-build.sh'
             }
         }
 
         stage('Unit Test') {
             steps {
-                // Make the unit test script executable and run it
                 sh 'chmod +x ./ci/03-unit-test.sh && ./ci/03-unit-test.sh'
                 mstest testResultsFile:"**/*.trx"
             }
@@ -52,17 +47,13 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Get the job name and build number
                     def jobName = env.JOB_NAME
                     def buildNumber = env.BUILD_NUMBER
 
-                    // Print the job name and build number
                     echo "Job Name: $jobName"
                     echo "Build Number: $buildNumber"
                 
-                    // Use credentials for Docker Hub login
                     withCredentials([usernamePassword(credentialsId: '1bb08ca6-f3cb-4ec7-953f-c3f7a93401ac', usernameVariable: 'DOCKER_HUB_USER', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                        // Make the push script executable and run it
                         sh "chmod +x ./ci/04-push.sh"
                         sh "./ci/04-push.sh $buildNumber"
                     }
