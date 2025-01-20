@@ -1,4 +1,4 @@
-#!/bin/bash
+anshuldevops#!/bin/bash
 docker image build -t anshuldevops/jenkins-demo2:$1 -f jenkins-plugin-model/src/demo2-publish/dockerfile .
 
 if [ -z ${DOCKER_HUB_USER+x} ]
@@ -8,4 +8,4 @@ else
     docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
 fi
 
-docker push anshuldevops/jenkins-demo2:$1
+docker push Piyushshrii/jenkins-demo2:$1
