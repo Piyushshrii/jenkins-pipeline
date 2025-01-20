@@ -33,7 +33,7 @@ pipeline {
         stage('Build Application') {
             steps {
                 // Adjust the script path and execution
-                sh 'chmod +x ./ci/01-build.sh && ./ci/01-build.sh'
+                sh 'chmod +x ci/01-build.sh && ci/01-build.sh'
             }
         }
 
