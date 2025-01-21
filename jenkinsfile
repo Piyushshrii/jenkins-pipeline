@@ -32,17 +32,15 @@ pipeline {
 
         stage('Build Application') {
             steps {
+                // Adjust the script path and execution
                 sh 'chmod +x ci/01-build.sh && ci/01-build.sh'
             }
         }
 
         stage('Unit Test') {
             steps {
-                script {
-                    sh 'chmod +x ci/03-unit-test.sh && ci/03-unit-test.sh'
-                    mstest testResultsFile: "**/src/Pi.Math.Tests/TestResults/Pi.Math.trx"
-                    mstest testResultsFile: "**/src/Pi.Runtime.Tests/TestResults/Pi.Runtime.trx"
-                }
+                sh 'chmod +x ./ci/03-unit-test.sh && ./ci/03-unit-test.sh'
+                mstest testResultsFile:"**/*.trx"
             }
         }
 
@@ -55,9 +53,9 @@ pipeline {
                     echo "Job Name: $jobName"
                     echo "Build Number: $buildNumber"
                 
-                    withCredentials([usernamePassword(credentialsId: 'c9b3d4dd-7e19-4bf4-bfcb-db82f78430f9', usernameVariable: 'DOCKER_HUB_USER', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                        sh "chmod +x ci/04-push.sh"
-                        sh "ci/04-push.sh $buildNumber"
+                    withCredentials([usernamePassword(credentialsId: '18128df9-b0f7-4ec5-bab2-37b425af189', usernameVariable: 'DOCKER_HUB_USER', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
+                        sh "chmod +x ./ci/04-push.sh"
+                        sh "./ci/04-push.sh $buildNumber"
                     }
                     
                     echo "Build Completed - Job Name: $jobName  --  Build Number: $buildNumber"
