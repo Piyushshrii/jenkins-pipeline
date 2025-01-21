@@ -32,15 +32,17 @@ pipeline {
 
         stage('Build Application') {
             steps {
-                // Adjust the script path and execution
                 sh 'chmod +x ci/01-build.sh && ci/01-build.sh'
             }
         }
 
         stage('Unit Test') {
             steps {
-                sh 'chmod +x ci/03-unit-test.sh && ci/03-unit-test.sh'
-                mstest testResultsFile:"*/*.trx"
+                script {
+                    sh 'chmod +x ci/03-unit-test.sh && ci/03-unit-test.sh'
+                    mstest testResultsFile: "**/src/Pi.Math.Tests/TestResults/Pi.Math.trx"
+                    mstest testResultsFile: "**/src/Pi.Runtime.Tests/TestResults/Pi.Runtime.trx"
+                }
             }
         }
 
